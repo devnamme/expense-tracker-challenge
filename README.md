@@ -1,3 +1,8 @@
+Designed and developed by Emmanuel Linus T. Evangelista<br />
+contact@emmanevangelista.com
+
+<hr />
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
