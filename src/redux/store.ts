@@ -5,7 +5,7 @@ import { expensesReducer } from "./modules/expenses";
 export const store = configureStore({
   reducer: {
     expenses: expensesReducer,
-    expenseModal: expenseModalReducer,
+    expenseModalState: expenseModalReducer,
   },
 });
 
