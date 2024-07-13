@@ -28,9 +28,6 @@ export default function DonutChart({ values, className = "" }: Props) {
     let sum = 0;
     let cumulative = 0;
 
-    // values.forEach(
-    //   (value: DonutChartItem) => (value.value = Math.floor(value.value))
-    // );
     values.forEach((value: DonutChartItem) => (sum += Math.floor(value.value)));
     values.forEach((value: DonutChartItem, idx: number) => {
       const angle =
@@ -61,13 +58,12 @@ export default function DonutChart({ values, className = "" }: Props) {
     <div
       className={`bg-gray-light rounded-md pb-2 px-4 flex flex-col ${className}`}
     >
-      <div className="grow flex flex-col items-center justify-center">
+      <div className="min-h-0 grow flex flex-col items-center justify-center">
         {arcs.filter((arc: Arc) => arc.value > 0).length > 0 ? (
           <svg
-            className="h-full w-auto"
-            width="32"
-            height="32"
+            className="h-full w-full"
             viewBox="-270 -270 540 540"
+            preserveAspectRatio="xMidYMid"
             xmlns="http://www.w3.org/2000/svg"
           >
             {arcs.map((arc: Arc, idx: number) =>

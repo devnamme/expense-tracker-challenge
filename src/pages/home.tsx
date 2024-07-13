@@ -95,7 +95,7 @@ export default function HomePage() {
   }, [expenses, pagination.mode, pagination.date]);
 
   return (
-    <>
+    <div className="grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-2 gap-8 grow min-h-0">
       <LineChart
         values={lineItems}
         className="min-h-0 h-full grow"
@@ -111,6 +111,6 @@ export default function HomePage() {
         }
       />
       <DonutChart values={donutItems} className="min-h-0 h-full grow" />
-    </>
+    </div>
   );
 }
