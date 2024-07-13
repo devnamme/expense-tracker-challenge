@@ -1,11 +1,13 @@
-export const getDayKey = (localDateString: string) =>
-  localDateString.substring(0, 10);
+export const getDayKey = (date: Date) =>
+  `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 
-export const getWeekKey = (UTCDateString: string) => {
-  const date = new Date(UTCDateString);
-  date.setDate(date.getDate() - date.getDay());
-  return date.toISOString().substring(0, 10);
+export const getWeekKey = (date: Date) => {
+  const sunday = new Date(date);
+  sunday.setDate(sunday.getDate() - sunday.getDay());
+  return getDayKey(sunday);
 };
 
-export const getMonthKey = (localDateString: string) =>
-  localDateString.substring(0, 7);
+export const getMonthKey = (date: Date) =>
+  `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`;

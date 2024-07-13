@@ -40,21 +40,17 @@ const expensesSlice = createSlice({
       data.forEach((row: Expense) => {
         state.byID[row.id!] = row;
 
-        let localDate = new Date(row.date);
-        localDate = new Date(
-          localDate.getTime() - localDate.getTimezoneOffset() * 60000
-        );
-        const localDateString = localDate.toISOString();
+        const date = new Date(row.date);
 
-        const day = getDayKey(localDateString);
+        const day = getDayKey(date);
         if (state.byDay[day] === undefined) state.byDay[day] = [];
         state.byDay[day].push(row.id!);
 
-        const week = getWeekKey(row.date);
+        const week = getWeekKey(date);
         if (state.byWeek[week] === undefined) state.byWeek[week] = [];
         state.byWeek[week].push(row.id!);
 
-        const month = getMonthKey(localDateString);
+        const month = getMonthKey(date);
         if (state.byMonth[month] === undefined) state.byMonth[month] = [];
         state.byMonth[month].push(row.id!);
       });
@@ -67,8 +63,7 @@ const expensesSlice = createSlice({
         payload: {
           name: string;
           amount: number;
-          UTCDateString: string;
-          localDateString: string;
+          date: string;
           category: string;
         };
       }
@@ -78,19 +73,21 @@ const expensesSlice = createSlice({
         id: id,
         name: action.payload.name,
         amount: action.payload.amount,
-        date: action.payload.UTCDateString,
+        date: action.payload.date,
         category: action.payload.category,
       };
 
-      const day = getDayKey(action.payload.localDateString);
+      const date = new Date(action.payload.date);
+
+      const day = getDayKey(date);
       if (state.byDay[day] === undefined) state.byDay[day] = [];
       state.byDay[day].push(id);
 
-      const week = getWeekKey(action.payload.UTCDateString);
+      const week = getWeekKey(date);
       if (state.byWeek[week] === undefined) state.byWeek[week] = [];
       state.byWeek[week].push(id);
 
-      const month = getMonthKey(action.payload.localDateString);
+      const month = getMonthKey(date);
       if (state.byMonth[month] === undefined) state.byMonth[month] = [];
       state.byMonth[month].push(id);
     },

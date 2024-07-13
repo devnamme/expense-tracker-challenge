@@ -83,17 +83,11 @@ export default function ExpenseModal({ active }: Props) {
       errors.category!.length === 0;
     if (!valid) return;
 
-    let local_date = new Date(date);
-    local_date = new Date(
-      local_date.getTime() + local_date.getTimezoneOffset() * 60000
-    );
-
     dispatch(
       addTask({
         name: name,
         amount: parseFloat(amount),
-        UTCDateString: local_date.toISOString(),
-        localDateString: new Date(date).toISOString(),
+        date: new Date(date).toISOString(),
         category: category,
       })
     );

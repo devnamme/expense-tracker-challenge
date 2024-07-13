@@ -49,7 +49,8 @@ export default function ViewModeSelector({
 
       <input
         className="bg-gray-light rounded-md px-4 min-w-0 shrink-1 appearance-none cursor-pointer"
-        type={mode === "day" ? "date" : mode}
+        type={mode === "day" || mode === "week" ? "date" : mode}
+        value={date}
         onChange={onDateChange}
       />
 
