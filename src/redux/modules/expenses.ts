@@ -120,12 +120,6 @@ const expensesSlice = createSlice({
       const month = getMonthKey(date);
       addToGroup(state, "byMonth", month, id);
 
-      // (["byDay", "byWeek", "byMonth"] as ExpensesGroupKey[]).forEach(
-      //   (group: ExpensesGroupKey) =>
-      //     Object.keys(state[group]).forEach((key: string) =>
-      //       calculateTotal(state, group, key)
-      //     )
-      // );
       calculateTotal(state, "byDay", day);
       calculateTotal(state, "byWeek", week);
       calculateTotal(state, "byMonth", month);
@@ -141,8 +135,42 @@ const expensesSlice = createSlice({
         };
       }
     ) => {
-      // TODO edit
-      // TODO recalculate totals
+      const old = { ...state.byID[action.payload.id] };
+
+      state.byID[action.payload.id] = {
+        ...action.payload.expense,
+        id: action.payload.id,
+      };
+
+      const oldDate = new Date(old.date);
+      const oldKeys = [
+        getDayKey(oldDate),
+        getWeekKey(oldDate),
+        getMonthKey(oldDate),
+      ];
+
+      const newDate = new Date(action.payload.expense.date);
+      const newKeys = [
+        getDayKey(newDate),
+        getWeekKey(newDate),
+        getMonthKey(newDate),
+      ];
+
+      (["byDay", "byWeek", "byMonth"] as ExpensesGroupKey[]).map(
+        (group: ExpensesGroupKey, idx: number) => {
+          if (oldKeys[idx] !== newKeys[idx]) {
+            // move
+            state[group][oldKeys[idx]].expenses = state[group][
+              oldKeys[idx]
+            ].expenses.filter((id: number) => id !== action.payload.id);
+            addToGroup(state, group, newKeys[idx], action.payload.id);
+
+            // recalculate
+            calculateTotal(state, group, oldKeys[idx]);
+            calculateTotal(state, group, newKeys[idx]);
+          }
+        }
+      );
     },
 
     deleteExpense: (
