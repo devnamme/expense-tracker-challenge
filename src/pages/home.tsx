@@ -38,6 +38,9 @@ export default function HomePage() {
     else setDate(newDate);
   };
 
+  const getGroup = () =>
+    `by${mode[0].toUpperCase()}${mode.substring(1)}` as ExpensesGroupKey;
+
   useEffect(() => console.log(expenses), [expenses]);
 
   return (
@@ -51,15 +54,9 @@ export default function HomePage() {
 
       <Total
         value={
-          expenses[
-            `by${mode[0].toUpperCase()}${mode.substring(1)}` as ExpensesGroupKey
-          ][date] === undefined
+          expenses[getGroup()][date] === undefined
             ? 0
-            : expenses[
-                `by${mode[0].toUpperCase()}${mode.substring(
-                  1
-                )}` as ExpensesGroupKey
-              ][date].total
+            : expenses[getGroup()][date].total
         }
         className=""
       />
