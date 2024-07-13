@@ -1,3 +1,7 @@
 export default function ListPage() {
-  return <h1>List Page</h1>;
+  return (
+    <>
+      <h1>List Page</h1>
+    </>
+  );
 }
