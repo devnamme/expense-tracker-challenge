@@ -92,7 +92,8 @@ export default function ExpenseModal({ active }: Props) {
       addTask({
         name: name,
         amount: parseFloat(amount),
-        date: local_date.toISOString(),
+        UTCDateString: local_date.toISOString(),
+        localDateString: new Date(date).toISOString(),
         category: category,
       })
     );

@@ -11,7 +11,7 @@ const random_names = {
 
 let data = [];
 
-let cdate = new Date(2022, 0, 1);
+let cdate = new Date(2023, 0, 1);
 for (let i = 0; i < 730; i++) {
   if (Math.floor(Math.random() * 3) == 0) {
     let num_expenses = Math.ceil(Math.random() * 5);
@@ -27,7 +27,6 @@ for (let i = 0; i < 730; i++) {
         Math.floor(Math.random() * 60),
         Math.floor(Math.random() * 60)
       );
-      date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
 
       data.push({
         id: data.length + 1,
@@ -35,7 +34,7 @@ for (let i = 0; i < 730; i++) {
         name: random_names[categ][
           Math.floor(Math.random() * random_names[categ].length)
         ],
-        value: Math.ceil(Math.random() * 100000) / 100,
+        amount: Math.ceil(Math.random() * 100000) / 100,
         date: date.toISOString(),
         category: categ,
       });

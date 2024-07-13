@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Expense } from "../../types/expense.interface";
+import { getDayKey, getMonthKey, getWeekKey } from "../../utils/dates";
 import data from "../data";
 
 export interface ExpensesState {
@@ -30,21 +31,30 @@ const expensesSlice = createSlice({
   name: "expenses",
   initialState: <ExpensesState>{ ...INITIAL_STATE },
   reducers: {
-    fetchTasks: (state, _) => {
+    fetchTasks: (state) => {
+      state.byID = {};
+      state.byDay = {};
+      state.byWeek = {};
+      state.byMonth = {};
+
       data.forEach((row: Expense) => {
         state.byID[row.id!] = row;
 
-        const day = row.date.substring(0, 10);
+        let localDate = new Date(row.date);
+        localDate = new Date(
+          localDate.getTime() - localDate.getTimezoneOffset() * 60000
+        );
+        const localDateString = localDate.toISOString();
+
+        const day = getDayKey(localDateString);
         if (state.byDay[day] === undefined) state.byDay[day] = [];
         state.byDay[day].push(row.id!);
 
-        const foo = new Date(row.date);
-        foo.setDate(foo.getDate() - foo.getDay());
-        const week = foo.toISOString().substring(0, 10);
+        const week = getWeekKey(row.date);
         if (state.byWeek[week] === undefined) state.byWeek[week] = [];
         state.byWeek[week].push(row.id!);
 
-        const month = row.date.substring(0, 7);
+        const month = getMonthKey(localDateString);
         if (state.byMonth[month] === undefined) state.byMonth[month] = [];
         state.byMonth[month].push(row.id!);
       });
@@ -57,12 +67,32 @@ const expensesSlice = createSlice({
         payload: {
           name: string;
           amount: number;
-          date: string;
+          UTCDateString: string;
+          localDateString: string;
           category: string;
         };
       }
     ) => {
-      // TODO
+      const id = Object.keys(state.byID).length + 1;
+      state.byID[id] = {
+        id: id,
+        name: action.payload.name,
+        amount: action.payload.amount,
+        date: action.payload.UTCDateString,
+        category: action.payload.category,
+      };
+
+      const day = getDayKey(action.payload.localDateString);
+      if (state.byDay[day] === undefined) state.byDay[day] = [];
+      state.byDay[day].push(id);
+
+      const week = getWeekKey(action.payload.UTCDateString);
+      if (state.byWeek[week] === undefined) state.byWeek[week] = [];
+      state.byWeek[week].push(id);
+
+      const month = getMonthKey(action.payload.localDateString);
+      if (state.byMonth[month] === undefined) state.byMonth[month] = [];
+      state.byMonth[month].push(id);
     },
 
     editTask: (state, action) => {
