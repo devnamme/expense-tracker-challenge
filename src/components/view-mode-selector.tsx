@@ -1,6 +1,7 @@
 import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
 import { FormEventHandler, MouseEventHandler } from "react";
 import { ViewMode } from "../types/view-mode.interface";
+import { getDayKey, getMonthKey, getWeekKey } from "../utils/dates";
 
 interface Props {
   mode: ViewMode;
@@ -17,12 +18,34 @@ export default function ViewModeSelector({
   setDate,
   className = "",
 }: Props) {
-  const onLeftClick: MouseEventHandler = (event) => {
-    // TODO
+  const onLeftClick: MouseEventHandler = () => {
+    const parsed = new Date(date);
+
+    if (mode === "day") {
+      parsed.setDate(parsed.getDate() - 1);
+      setDate(getDayKey(parsed));
+    } else if (mode === "week") {
+      parsed.setDate(parsed.getDate() - 7);
+      setDate(getWeekKey(parsed));
+    } else if (mode === "month") {
+      parsed.setMonth(parsed.getMonth() - 1);
+      setDate(getMonthKey(parsed));
+    }
   };
 
-  const onRightClick: MouseEventHandler = (event) => {
-    // TODO
+  const onRightClick: MouseEventHandler = () => {
+    const parsed = new Date(date);
+
+    if (mode === "day") {
+      parsed.setDate(parsed.getDate() + 1);
+      setDate(getDayKey(parsed));
+    } else if (mode === "week") {
+      parsed.setDate(parsed.getDate() + 7);
+      setDate(getWeekKey(parsed));
+    } else if (mode === "month") {
+      parsed.setMonth(parsed.getMonth() + 1);
+      setDate(getMonthKey(parsed));
+    }
   };
 
   const onDateChange: FormEventHandler = (event) =>
