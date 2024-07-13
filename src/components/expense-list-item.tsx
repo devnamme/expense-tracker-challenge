@@ -53,7 +53,7 @@ export default function ExpenseListItem({ expense, showDate = false }: Props) {
       </div>
 
       <More
-        className="shrink-0 rotate-90 cursor-pointer"
+        className="shrink-0 rotate-90 cursor-pointer -mx-2"
         onClick={onEditClick}
       />
     </div>
