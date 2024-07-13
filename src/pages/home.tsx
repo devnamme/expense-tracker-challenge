@@ -5,6 +5,7 @@ import LineChart, { LineChartItem } from "../components/charts/line-chart";
 import { Categories } from "../constants/categories";
 import { ExpensesGroupKey } from "../redux/modules/expenses";
 import { RootState } from "../redux/store";
+import { getDayKey } from "../utils/dates";
 
 export default function HomePage() {
   const expenses = useSelector((state: RootState) => state.expenses);
@@ -42,19 +43,37 @@ export default function HomePage() {
     Object.keys(Categories).forEach((key: string) => newItems.push(temp[key]));
 
     setDonutItems(newItems);
+
+    //////////////////////////////////////////////////
+    let tempLines: LineChartItem[] = [];
+    let date: Date;
+
+    if (pagination.mode === "day") {
+      date = new Date(pagination.date);
+      date.setDate(date.getDate() - 20);
+
+      for (let i = 0; i < 21; i++) {
+        let key = getDayKey(date);
+        tempLines.push({
+          value:
+            expenses.byDay[key] === undefined ? 0 : expenses.byDay[key].total,
+          label: key,
+        });
+
+        date.setDate(date.getDate() + 1);
+      }
+    }
+
+    setLineItems(tempLines);
   }, [expenses, pagination.mode, pagination.date]);
 
   return (
     <>
       <LineChart
-        values={[
-          { value: 0, label: "1" },
-          { value: 5, label: "2" },
-          { value: 15, label: "3" },
-          { value: 7, label: "4" },
-          { value: 4, label: "5" },
-        ]}
+        values={lineItems}
         className="min-h-0 h-full grow"
+        horizontalStep={5}
+        verticalStep={500}
       />
       <DonutChart values={donutItems} className="min-h-0 h-full grow" />
     </>
