@@ -15,7 +15,7 @@ const expenseModalSlice = createSlice({
   name: "expenseModal",
   initialState: <ExpenseModalState>{ ...INITIAL_STATE },
   reducers: {
-    setAdding: (state, _) => {
+    setAdding: (state) => {
       state.active = true;
       state.expense = null;
     },
@@ -25,7 +25,7 @@ const expenseModalSlice = createSlice({
       state.expense = action.payload.expense;
     },
 
-    closeModal: (state, _) => {
+    closeModal: (state) => {
       state.active = false;
     },
   },
