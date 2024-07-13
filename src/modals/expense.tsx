@@ -90,7 +90,7 @@ export default function ExpenseModal({ active }: Props) {
           id: expenseModalState.expense.id!,
           expense: {
             name: name,
-            amount: parseFloat(amount),
+            amount: Math.round(parseFloat(amount) * 100) / 100,
             date: new Date(date).toISOString(),
             category: category,
           },
@@ -100,7 +100,7 @@ export default function ExpenseModal({ active }: Props) {
       dispatch(
         addExpense({
           name: name,
-          amount: parseFloat(amount),
+          amount: Math.round(parseFloat(amount) * 100) / 100,
           date: new Date(date).toISOString(),
           category: category,
         })
