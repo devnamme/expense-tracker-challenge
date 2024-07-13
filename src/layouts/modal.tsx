@@ -18,10 +18,7 @@ export default function ModalLayout({ active, children }: Props) {
         active ? "opacity-1" : "pointer-events-none opacity-0"
       } duration-300`}
     >
-      <div
-        className="fixed top-0 left-0 w-full h-full cursor-pointer"
-        onClick={handleClose}
-      />
+      <div className="fixed top-0 left-0 w-full h-full" onClick={handleClose} />
       <div
         className={`z-[11] ${
           active ? "translate-y-0" : "translate-y-full"
