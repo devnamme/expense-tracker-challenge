@@ -18,8 +18,6 @@ export default function HomePage() {
     )}` as ExpensesGroupKey;
 
   useEffect(() => {
-    console.log("updating");
-
     let temp: { [key: string]: DonutChartItem } = {};
 
     Object.keys(Categories).forEach(

@@ -62,58 +62,64 @@ export default function DonutChart({ values, className = "" }: Props) {
       className={`bg-gray-light rounded-md pb-2 px-4 flex flex-col ${className}`}
     >
       <div className="grow flex flex-col items-center justify-center">
-        <svg
-          className="h-full w-auto"
-          width="32"
-          height="32"
-          viewBox="-270 -270 540 540"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {arcs.map((arc: Arc, idx: number) =>
-            arc.value > 0 || idx == arcs.length - 1 ? (
-              <circle
-                key={`donut-circle-${idx}`}
-                r="160"
-                stroke={arc.color}
-                strokeWidth="40"
-                pathLength={arc.pathLength}
-                strokeDasharray={arc.dasharray}
-                fill="none"
-              />
-            ) : null
-          )}
-          {arcs.map((arc: Arc, idx: number) =>
-            arc.value > 0 || idx == arcs.length - 1 ? (
-              <text
-                key={`donut-text-${idx}`}
-                x={arc.valueX || 0}
-                y={arc.valueY || 0}
-                dominantBaseline="middle"
-                textAnchor="middle"
-                className="text-4xl"
-              >
-                {arc.value.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </text>
-            ) : null
-          )}
-        </svg>
+        {arcs.filter((arc: Arc) => arc.value > 0).length > 0 ? (
+          <svg
+            className="h-full w-auto"
+            width="32"
+            height="32"
+            viewBox="-270 -270 540 540"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {arcs.map((arc: Arc, idx: number) =>
+              arc.value > 0 ? (
+                <circle
+                  key={`donut-circle-${idx}`}
+                  r="160"
+                  stroke={arc.color}
+                  strokeWidth="40"
+                  pathLength={arc.pathLength}
+                  strokeDasharray={arc.dasharray}
+                  fill="none"
+                />
+              ) : null
+            )}
+            {arcs.map((arc: Arc, idx: number) =>
+              arc.value > 0 ? (
+                <text
+                  key={`donut-text-${idx}`}
+                  x={arc.valueX || 0}
+                  y={arc.valueY || 0}
+                  dominantBaseline="middle"
+                  textAnchor="middle"
+                  className="text-4xl"
+                >
+                  {arc.value.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </text>
+              ) : null
+            )}
+          </svg>
+        ) : (
+          <p>No data!</p>
+        )}
       </div>
 
       <div className="flex flex-row flex-wrap align-center justify-center gap-x-4">
-        {values.map((item: DonutChartItem, idx: number) => (
-          <div key={`donut-legend-${idx}`} className="text-sm">
-            <div
-              className="inline-block w-3 h-3 rounded-full mr-2"
-              style={{
-                backgroundColor: item.color,
-              }}
-            />
-            {item.legend}
-          </div>
-        ))}
+        {values.map((item: DonutChartItem, idx: number) =>
+          item.value > 0 ? (
+            <div key={`donut-legend-${idx}`} className="text-sm">
+              <div
+                className="inline-block w-3 h-3 rounded-full mr-2"
+                style={{
+                  backgroundColor: item.color,
+                }}
+              />
+              {item.legend}
+            </div>
+          ) : null
+        )}
       </div>
     </div>
   );
