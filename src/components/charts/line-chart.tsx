@@ -57,6 +57,8 @@ export default function LineChart({
       });
 
       setPath(newPath);
+    } else {
+      setPath("");
     }
   }, [values]);
 
