@@ -1,6 +1,7 @@
 import { More } from "iconsax-react";
 import { MouseEventHandler } from "react";
 import { useDispatch } from "react-redux";
+import { Categories } from "../constants/categories";
 import { setEditing } from "../redux/modules/expense-modal";
 import { AppDispatch } from "../redux/store";
 import { Expense } from "../types/expense.interface";
@@ -41,7 +42,10 @@ export default function ExpenseListItem({ expense, showDate = false }: Props) {
 
   return (
     <div className="bg-gray-light py-2 px-4 rounded flex flex-row flex-nowrap items-center justify-start gap-x-4">
-      <p className="mr-auto shrink line-clamp-2">{expense.name}</p>
+      <div className="mr-auto">
+        <p className="shrink line-clamp-2">{expense.name}</p>
+        <p className="text-xs">{Categories[expense.category].name}</p>
+      </div>
 
       <div className="shrink-0 flex flex-col items-end">
         <p className="font-medium text-right">
