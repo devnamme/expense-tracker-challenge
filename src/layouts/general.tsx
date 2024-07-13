@@ -5,7 +5,7 @@ import NavMenu from "../components/nav-menu";
 import Total from "../components/total";
 import ViewModeSelector from "../components/view-mode-selector";
 import ExpenseModal from "../modals/expense";
-import { ExpensesGroupKey, fetchTasks } from "../redux/modules/expenses";
+import { ExpensesGroupKey, fetchExpenses } from "../redux/modules/expenses";
 import { setDate, setMode } from "../redux/modules/pagination";
 import { AppDispatch, RootState } from "../redux/store";
 import { ViewMode } from "../types/view-mode.interface";
@@ -28,7 +28,7 @@ export default function GeneralLayout({}: GeneralLayoutProps) {
     )}` as ExpensesGroupKey;
 
   useEffect(() => {
-    if (!expenseModalState.active) dispatch(fetchTasks());
+    if (!expenseModalState.active) dispatch(fetchExpenses());
   }, [expenseModalState.active]);
 
   return (

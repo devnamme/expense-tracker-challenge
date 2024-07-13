@@ -20,7 +20,15 @@ const expenseModalSlice = createSlice({
       state.expense = null;
     },
 
-    setEditing: (state, action) => {
+    setEditing: (
+      state,
+      action: {
+        type: string;
+        payload: {
+          expense: Expense;
+        };
+      }
+    ) => {
       state.active = true;
       state.expense = action.payload.expense;
     },

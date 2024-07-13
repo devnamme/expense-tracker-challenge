@@ -63,7 +63,7 @@ const expensesSlice = createSlice({
   name: "expenses",
   initialState: <ExpensesState>{ ...INITIAL_STATE },
   reducers: {
-    fetchTasks: (state) => {
+    fetchExpenses: (state) => {
       state.byID = {};
       state.byDay = {};
       state.byWeek = {};
@@ -88,7 +88,7 @@ const expensesSlice = createSlice({
       });
     },
 
-    addTask: (
+    addExpense: (
       state,
       action: {
         type: string;
@@ -131,7 +131,7 @@ const expensesSlice = createSlice({
       calculateTotal(state, "byMonth", month);
     },
 
-    editTask: (
+    editExpense: (
       state,
       action: {
         type: string;
@@ -160,6 +160,6 @@ const expensesSlice = createSlice({
   },
 });
 
-export const { fetchTasks, addTask, editTask, deleteTask } =
+export const { fetchExpenses, addExpense, editExpense, deleteTask } =
   expensesSlice.actions;
 export const expensesReducer = expensesSlice.reducer;

@@ -8,8 +8,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../constants/categories";
 import { closeModal } from "../redux/modules/expense-modal";
-import { addTask } from "../redux/modules/expenses";
+import { addExpense } from "../redux/modules/expenses";
 import { AppDispatch, RootState } from "../redux/store";
+import { getDayKey } from "../utils/dates";
 
 interface Props {
   active: boolean;
@@ -83,14 +84,19 @@ export default function ExpenseModal({ active }: Props) {
       errors.category!.length === 0;
     if (!valid) return;
 
-    dispatch(
-      addTask({
-        name: name,
-        amount: parseFloat(amount),
-        date: new Date(date).toISOString(),
-        category: category,
-      })
-    );
+    if (expenseModalState.expense !== null) {
+      // dispatch();
+    } else {
+      dispatch(
+        addExpense({
+          name: name,
+          amount: parseFloat(amount),
+          date: new Date(date).toISOString(),
+          category: category,
+        })
+      );
+    }
+
     dispatch(closeModal());
   };
 
@@ -100,10 +106,18 @@ export default function ExpenseModal({ active }: Props) {
 
   useEffect(() => {
     if (active) {
-      setName("");
-      setAmount("");
-      setDate("");
-      setCategory("");
+      if (expenseModalState.expense !== null) {
+        setName(expenseModalState.expense.name);
+        setAmount(expenseModalState.expense.amount.toString());
+        setDate(getDayKey(new Date(expenseModalState.expense.date)));
+        setCategory(expenseModalState.expense.category);
+      } else {
+        setName("");
+        setAmount("");
+        setDate("");
+        setCategory("");
+      }
+
       setErrorMessages({ ...DEFAULT_ERROR_MESSAGES });
     }
   }, [active]);
