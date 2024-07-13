@@ -7,6 +7,7 @@ interface Props {
   setMode: Function;
   date: string;
   setDate: Function;
+  className?: string;
 }
 
 export default function ViewModeSelector({
@@ -14,6 +15,7 @@ export default function ViewModeSelector({
   setMode,
   date,
   setDate,
+  className = "",
 }: Props) {
   const onLeftClick: MouseEventHandler = (event) => {
     // TODO
@@ -23,14 +25,13 @@ export default function ViewModeSelector({
     // TODO
   };
 
-  const onDateChange: FormEventHandler = (event) => {
-    // TODO
-  };
+  const onDateChange: FormEventHandler = (event) =>
+    setDate((event.target as HTMLInputElement).value);
 
   return (
-    <div className="flex flex-row flex-nowrap gap-x-4 shrink-1">
+    <div className={`flex flex-row flex-nowrap gap-x-4 shrink-1 ${className}`}>
       <select
-        className="bg-gray-200 rounded-md px-4 min-w-0 shrink-1 mr-auto appearance-none cursor-pointer"
+        className="bg-gray-light rounded-md px-4 min-w-0 shrink-1 mr-auto appearance-none cursor-pointer"
         value={mode}
         onChange={(event) => setMode(event.target.value as ViewMode)}
       >
@@ -40,20 +41,20 @@ export default function ViewModeSelector({
       </select>
 
       <button
-        className="bg-gray-200 rounded-md h-12 w-12 flex flex-col items-center justify-center shrink-0"
+        className="bg-gray-light rounded-md h-12 w-12 flex flex-col items-center justify-center shrink-0"
         onClick={onLeftClick}
       >
         <ArrowLeft2 size="1rem" />
       </button>
 
       <input
-        className="bg-gray-200 rounded-md px-4 min-w-0 shrink-1 cursor-pointer"
+        className="bg-gray-light rounded-md px-4 min-w-0 shrink-1 appearance-none cursor-pointer"
         type={mode === "day" ? "date" : mode}
         onChange={onDateChange}
       />
 
       <button
-        className="bg-gray-200 rounded-md h-12 w-12 flex flex-col items-center justify-center shrink-0"
+        className="bg-gray-light rounded-md h-12 w-12 flex flex-col items-center justify-center shrink-0"
         onClick={onRightClick}
       >
         <ArrowRight2 size="1rem" />

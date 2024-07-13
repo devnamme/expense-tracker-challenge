@@ -16,7 +16,7 @@ export default function NavMenu() {
   const onListClick = () => navigate("/list");
 
   return (
-    <nav className="bg-gray-700 flex flex-row flex-nowrap items-center justify-between py-4 px-8">
+    <nav className="bg-gray-dark flex flex-row flex-nowrap items-center justify-between py-4 px-8">
       <Home
         size="2rem"
         color="white"

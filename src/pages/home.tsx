@@ -1,4 +1,7 @@
 import { useState } from "react";
+import DonutChart from "../components/charts/donut-chart";
+import LineChart from "../components/charts/line-chart";
+import Total from "../components/total";
 import ViewModeSelector from "../components/view-mode-selector";
 import { ViewMode } from "../types/view-mode.interface";
 
@@ -11,13 +14,19 @@ export default function HomePage() {
   );
 
   return (
-    <>
+    <div className="flex flex-col gap-y-6 grow">
       <ViewModeSelector
         mode={mode}
         setMode={setMode}
         date={date}
         setDate={setDate}
       />
-    </>
+
+      <Total value={0} className="" />
+
+      <LineChart className="grow" />
+
+      <DonutChart className="grow" />
+    </div>
   );
 }
