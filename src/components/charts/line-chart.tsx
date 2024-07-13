@@ -77,6 +77,18 @@ export default function LineChart({
           className="stroke-black/50"
         />
 
+        {verticalLegends.map((legend: VerticalLegend, idx: number) => (
+          <line
+            key={`line-hr-${idx}`}
+            x1="0"
+            y1={legend.y}
+            x2="400"
+            y2={legend.y}
+            strokeWidth="1"
+            className="stroke-black/25"
+          />
+        ))}
+
         <path
           d={path}
           strokeWidth="2"
@@ -87,7 +99,7 @@ export default function LineChart({
         {values.map((value: LineChartItem, idx: number) =>
           idx % horizontalStep == 0 ? (
             <text
-              key={`line-legend-${idx}`}
+              key={`line-hor-legend-${idx}`}
               x={idx * (400 / (values.length - 1))}
               y={220}
               dominantBaseline="auto"
@@ -99,28 +111,28 @@ export default function LineChart({
           ) : null
         )}
 
-        <text
-          x={-10}
-          y={0}
-          dominantBaseline="auto"
-          textAnchor="end"
-          className="text-sm leading-none"
-        >
-          {maxValue.toFixed(2)}
-        </text>
-
         {verticalLegends.map((legend: VerticalLegend, idx: number) => (
           <text
             key={`line-vert-legend-${idx}`}
             x={-10}
             y={legend.y}
-            dominantBaseline="auto"
+            dominantBaseline="middle"
             textAnchor="end"
             className="text-sm leading-none"
           >
             {legend.label}
           </text>
         ))}
+
+        <text
+          x={-10}
+          y={0}
+          dominantBaseline="middle"
+          textAnchor="end"
+          className="text-sm leading-none"
+        >
+          {maxValue.toFixed(2)}
+        </text>
       </svg>
     </div>
   );

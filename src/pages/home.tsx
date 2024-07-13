@@ -5,7 +5,7 @@ import LineChart, { LineChartItem } from "../components/charts/line-chart";
 import { Categories } from "../constants/categories";
 import { ExpensesGroupKey } from "../redux/modules/expenses";
 import { RootState } from "../redux/store";
-import { getDayKey } from "../utils/dates";
+import { getDayKey, getMonthKey, getWeekKey } from "../utils/dates";
 
 export default function HomePage() {
   const expenses = useSelector((state: RootState) => state.expenses);
@@ -46,10 +46,9 @@ export default function HomePage() {
 
     //////////////////////////////////////////////////
     let tempLines: LineChartItem[] = [];
-    let date: Date;
+    let date: Date = new Date(pagination.date);
 
     if (pagination.mode === "day") {
-      date = new Date(pagination.date);
       date.setDate(date.getDate() - 20);
 
       for (let i = 0; i < 21; i++) {
@@ -62,6 +61,34 @@ export default function HomePage() {
 
         date.setDate(date.getDate() + 1);
       }
+    } else if (pagination.mode === "week") {
+      date.setDate(date.getDate() - 7 * 20);
+
+      for (let i = 0; i < 21; i++) {
+        let key = getWeekKey(date);
+        tempLines.push({
+          value:
+            expenses.byWeek[key] === undefined ? 0 : expenses.byWeek[key].total,
+          label: key,
+        });
+
+        date.setDate(date.getDate() + 7);
+      }
+    } else if (pagination.mode === "month") {
+      date.setMonth(date.getMonth() - 12);
+
+      for (let i = 0; i < 13; i++) {
+        let key = getMonthKey(date);
+        tempLines.push({
+          value:
+            expenses.byMonth[key] === undefined
+              ? 0
+              : expenses.byMonth[key].total,
+          label: key,
+        });
+
+        date.setMonth(date.getMonth() + 1);
+      }
     }
 
     setLineItems(tempLines);
@@ -72,8 +99,16 @@ export default function HomePage() {
       <LineChart
         values={lineItems}
         className="min-h-0 h-full grow"
-        horizontalStep={5}
-        verticalStep={500}
+        horizontalStep={
+          pagination.mode === "day" ? 5 : pagination.mode === "week" ? 5 : 2
+        }
+        verticalStep={
+          pagination.mode === "day"
+            ? 500
+            : pagination.mode === "week"
+            ? 1000
+            : 3000
+        }
       />
       <DonutChart values={donutItems} className="min-h-0 h-full grow" />
     </>
