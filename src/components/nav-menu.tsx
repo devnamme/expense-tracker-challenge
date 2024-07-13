@@ -1,12 +1,13 @@
 import { AddSquare, Driver, Home } from "iconsax-react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setAdding } from "../redux/modules/expense-modal";
 import { AppDispatch } from "../redux/store";
 
 export default function NavMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { pathname } = useLocation();
 
   const onHomeClick = () => navigate("/");
   const onAddClick = () => {
@@ -21,6 +22,7 @@ export default function NavMenu() {
         color="white"
         className="cursor-pointer"
         onClick={onHomeClick}
+        variant={pathname === "/" ? "Bold" : "Outline"}
       />
 
       <AddSquare
@@ -35,6 +37,7 @@ export default function NavMenu() {
         color="white"
         className="cursor-pointer"
         onClick={onListClick}
+        variant={pathname === "/list" ? "Bold" : "Outline"}
       />
     </nav>
   );
