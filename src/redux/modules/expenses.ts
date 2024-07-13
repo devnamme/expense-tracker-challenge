@@ -6,25 +6,34 @@ import data from "../data";
 export interface ExpensesState {
   byID: { [key: number]: Expense };
   byDay: {
-    [key: string]: number[];
-    // "YYYY-MM-DD": string[]
+    total: number;
+    expenses: {
+      [key: string]: number[];
+      // "YYYY-MM-DD": string[]
+    };
   };
   byWeek: {
-    [key: string]: number[];
-    // "YYYY-MM-DD": string[]
-    // DD should be day 0 (Sunday)
+    total: number;
+    expenses: {
+      [key: string]: number[];
+      // "YYYY-MM-DD": string[]
+      // DD should be day 0 (Sunday)
+    };
   };
   byMonth: {
-    [key: string]: number[];
-    // "YYYY-MM": string[]
+    total: number;
+    expenses: {
+      [key: string]: number[];
+      // "YYYY-MM": string[]
+    };
   };
 }
 
 const INITIAL_STATE: ExpensesState = {
   byID: {},
-  byDay: {},
-  byWeek: {},
-  byMonth: {},
+  byDay: { total: 0, expenses: {} },
+  byWeek: { total: 0, expenses: {} },
+  byMonth: { total: 0, expenses: {} },
 };
 
 const expensesSlice = createSlice({
@@ -33,9 +42,9 @@ const expensesSlice = createSlice({
   reducers: {
     fetchTasks: (state) => {
       state.byID = {};
-      state.byDay = {};
-      state.byWeek = {};
-      state.byMonth = {};
+      state.byDay = { total: 0, expenses: {} };
+      state.byWeek = { total: 0, expenses: {} };
+      state.byMonth = { total: 0, expenses: {} };
 
       data.forEach((row: Expense) => {
         state.byID[row.id!] = row;
@@ -43,16 +52,19 @@ const expensesSlice = createSlice({
         const date = new Date(row.date);
 
         const day = getDayKey(date);
-        if (state.byDay[day] === undefined) state.byDay[day] = [];
-        state.byDay[day].push(row.id!);
+        if (state.byDay.expenses[day] === undefined)
+          state.byDay.expenses[day] = [];
+        state.byDay.expenses[day].push(row.id!);
 
         const week = getWeekKey(date);
-        if (state.byWeek[week] === undefined) state.byWeek[week] = [];
-        state.byWeek[week].push(row.id!);
+        if (state.byWeek.expenses[week] === undefined)
+          state.byWeek.expenses[week] = [];
+        state.byWeek.expenses[week].push(row.id!);
 
         const month = getMonthKey(date);
-        if (state.byMonth[month] === undefined) state.byMonth[month] = [];
-        state.byMonth[month].push(row.id!);
+        if (state.byMonth.expenses[month] === undefined)
+          state.byMonth.expenses[month] = [];
+        state.byMonth.expenses[month].push(row.id!);
       });
     },
 
@@ -80,23 +92,43 @@ const expensesSlice = createSlice({
       const date = new Date(action.payload.date);
 
       const day = getDayKey(date);
-      if (state.byDay[day] === undefined) state.byDay[day] = [];
-      state.byDay[day].push(id);
+      if (state.byDay.expenses[day] === undefined)
+        state.byDay.expenses[day] = [];
+      state.byDay.expenses[day].push(id);
 
       const week = getWeekKey(date);
-      if (state.byWeek[week] === undefined) state.byWeek[week] = [];
-      state.byWeek[week].push(id);
+      if (state.byWeek.expenses[week] === undefined)
+        state.byWeek.expenses[week] = [];
+      state.byWeek.expenses[week].push(id);
 
       const month = getMonthKey(date);
-      if (state.byMonth[month] === undefined) state.byMonth[month] = [];
-      state.byMonth[month].push(id);
+      if (state.byMonth.expenses[month] === undefined)
+        state.byMonth.expenses[month] = [];
+      state.byMonth.expenses[month].push(id);
     },
 
-    editTask: (state, action) => {
+    editTask: (
+      state,
+      action: {
+        type: string;
+        payload: {
+          id: number;
+          expense: Expense;
+        };
+      }
+    ) => {
       // TODO
     },
 
-    deleteTask: (state, action) => {
+    deleteTask: (
+      state,
+      action: {
+        type: string;
+        payload: {
+          id: string;
+        };
+      }
+    ) => {
       // TODO
     },
   },
