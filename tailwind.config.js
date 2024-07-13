@@ -17,6 +17,7 @@ export default {
           DEFAULT: colors.gray["400"],
           dark: colors.gray["700"],
         },
+        error: colors.red["500"],
       },
     },
   },

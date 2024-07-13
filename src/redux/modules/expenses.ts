@@ -50,7 +50,18 @@ const expensesSlice = createSlice({
       });
     },
 
-    addTask: (state, action) => {
+    addTask: (
+      state,
+      action: {
+        type: string;
+        payload: {
+          name: string;
+          amount: number;
+          date: string;
+          category: string;
+        };
+      }
+    ) => {
       // TODO
     },
 

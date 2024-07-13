@@ -1,3 +1,4 @@
+import { InfoCircle } from "iconsax-react";
 import {
   FormEventHandler,
   MouseEventHandler,
@@ -7,11 +8,21 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../constants/categories";
 import { closeModal } from "../redux/modules/expense-modal";
+import { addTask } from "../redux/modules/expenses";
 import { AppDispatch, RootState } from "../redux/store";
 
 interface Props {
   active: boolean;
 }
+
+interface ErrorMessages {
+  name?: string;
+  amount?: string;
+  date?: string;
+  category?: string;
+}
+
+const DEFAULT_ERROR_MESSAGES: ErrorMessages = {};
 
 export default function ExpenseModal({ active }: Props) {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,14 +34,68 @@ export default function ExpenseModal({ active }: Props) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
-  const [category, setCategory] = useState("others");
+  const [category, setCategory] = useState("");
+  const [errorMessages, setErrorMessages] = useState({
+    ...DEFAULT_ERROR_MESSAGES,
+  });
 
   const fieldClasses =
-    "bg-white text-black text-left p-2 rounded appearance-none";
+    "w-full min-h-10 bg-white text-black text-left p-2 rounded appearance-none";
+  const errorFieldClasses = "border-2 border-error";
+
+  const validateNonEmptyField = (value: string): string => {
+    return value.length ? "" : "Field should not be left blank.";
+  };
+
+  const validateAmountField = (amount: string): string => {
+    if (amount.length === 0) {
+      return "Field should not be left blank.";
+    }
+    if (parseFloat(amount) < 0) {
+      return "Amount should not be negative.";
+    }
+
+    return "";
+  };
+
+  const generateErrorMessage = (text: string | undefined) =>
+    text ? (
+      <p className="mt-1 text-error leading-none">
+        <InfoCircle size="1rem" className="inline-block align-top" /> {text}
+      </p>
+    ) : null;
 
   const onSubmit: FormEventHandler = (event) => {
     event.preventDefault();
 
+    const errors: ErrorMessages = {
+      name: validateNonEmptyField(name),
+      amount: validateAmountField(name),
+      date: validateNonEmptyField(date),
+      category: validateNonEmptyField(category),
+    };
+    setErrorMessages(errors);
+
+    const valid =
+      errors.name!.length === 0 &&
+      errors.amount!.length === 0 &&
+      errors.date!.length === 0 &&
+      errors.category!.length === 0;
+    if (!valid) return;
+
+    let local_date = new Date(date);
+    local_date = new Date(
+      local_date.getTime() + local_date.getTimezoneOffset() * 60000
+    );
+
+    dispatch(
+      addTask({
+        name: name,
+        amount: parseFloat(amount),
+        date: local_date.toISOString(),
+        category: category,
+      })
+    );
     dispatch(closeModal());
   };
 
@@ -43,56 +108,102 @@ export default function ExpenseModal({ active }: Props) {
       setName("");
       setAmount("");
       setDate("");
-      setCategory("others");
+      setCategory("");
+      setErrorMessages({ ...DEFAULT_ERROR_MESSAGES });
     }
   }, [active]);
 
   return (
     <form
-      className="w-full bg-gray-300 rounded-2xl p-4 grid grid-cols-1 grid-rows-5 gap-y-4"
+      className="w-full bg-gray-300 rounded-2xl p-4 flex flex-col gap-y-4"
       onSubmit={onSubmit}
     >
-      <input
-        type="text"
-        placeholder="Name"
-        className={fieldClasses}
-        value={name}
-        onChange={(event) => setName((event.target as HTMLInputElement).value)}
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Name"
+          className={`${fieldClasses} ${
+            errorMessages.name ? errorFieldClasses : ""
+          }`}
+          value={name}
+          onChange={(event) => {
+            const value = (event.target as HTMLInputElement).value;
+            setName(value);
+            setErrorMessages({
+              ...errorMessages,
+              name: validateNonEmptyField(value),
+            });
+          }}
+        />
+        {generateErrorMessage(errorMessages.name)}
+      </div>
 
-      <input
-        type="number"
-        placeholder="Amount"
-        className={fieldClasses}
-        value={amount}
-        onChange={(event) =>
-          setAmount((event.target as HTMLInputElement).value)
-        }
-      />
+      <div>
+        <input
+          type="number"
+          placeholder="Amount"
+          className={`${fieldClasses} ${
+            errorMessages.amount ? errorFieldClasses : ""
+          }`}
+          value={amount}
+          onChange={(event) => {
+            const value = (event.target as HTMLInputElement).value;
+            setAmount((event.target as HTMLInputElement).value);
+            setErrorMessages({
+              ...errorMessages,
+              amount: validateAmountField(value),
+            });
+          }}
+        />
+        {generateErrorMessage(errorMessages.amount)}
+      </div>
 
-      <input
-        type="date"
-        className={fieldClasses}
-        value={date}
-        onChange={(event) => setDate((event.target as HTMLInputElement).value)}
-      />
+      <div>
+        <input
+          type="date"
+          className={`${fieldClasses} ${
+            errorMessages.date ? errorFieldClasses : ""
+          }`}
+          value={date}
+          onChange={(event) => {
+            const value = (event.target as HTMLInputElement).value;
+            setDate(value);
+            setErrorMessages({
+              ...errorMessages,
+              date: validateNonEmptyField(value),
+            });
+          }}
+        />
+        {generateErrorMessage(errorMessages.date)}
+      </div>
 
-      <select
-        value={category}
-        onChange={(event) =>
-          setCategory((event.target as HTMLSelectElement).value)
-        }
-        className={fieldClasses}
-      >
-        {Categories.map((categ) => (
-          <option key={`select-category-${categ.value}`} value={categ.value}>
-            {categ.name}
-          </option>
-        ))}
-      </select>
+      <div>
+        <select
+          value={category}
+          onChange={(event) => {
+            const value = (event.target as HTMLSelectElement).value;
+            setCategory(value);
+            setErrorMessages({
+              ...errorMessages,
+              category: validateNonEmptyField(value),
+            });
+          }}
+          className={`${fieldClasses} ${
+            errorMessages.category ? errorFieldClasses : ""
+          }`}
+        >
+          <option value="">--Select Category--</option>
+          {Categories.map((categ) => (
+            <option key={`select-category-${categ.value}`} value={categ.value}>
+              {categ.name}
+            </option>
+          ))}
+        </select>
+        {generateErrorMessage(errorMessages.category)}
+      </div>
 
       <div
-        className={`grid ${
+        className={`min-h-10 grid ${
           expenseModalState.expense != null ? "grid-cols-2" : "grid-cols-1"
         } gap-x-4`}
       >
