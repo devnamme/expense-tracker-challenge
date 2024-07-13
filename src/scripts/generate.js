@@ -1,20 +1,18 @@
-// import crypto from "crypto";
-
 const categories = ["food", "bills", "transportation", "clothing", "others"];
 const random_names = {
   food: ["Breakfast", "Lunch", "Dinner", "Snacks"],
   bills: ["Water", "Electricity", "Phone", "Rent"],
   transportation: ["Grab", "Angkas", "Bus", "Jeep", "Tricycle"],
-  clothing: ["Clothes"],
-  others: ["Others"],
+  clothing: ["Ukay-ukay", "H&M", "Uniqlo", "Zara"],
+  others: ["Gift", "Cleaning materials", "Stationary"],
 };
 
 let data = [];
 
 let cdate = new Date(2023, 0, 1);
 for (let i = 0; i < 730; i++) {
-  if (Math.floor(Math.random() * 3) == 0) {
-    let num_expenses = Math.ceil(Math.random() * 5);
+  if (true || Math.floor(Math.random() * 3) == 0) {
+    let num_expenses = Math.ceil(Math.random() * 3);
 
     for (let j = 0; j < num_expenses; j++) {
       let categ = categories[Math.floor(Math.random() * categories.length)];
@@ -30,7 +28,6 @@ for (let i = 0; i < 730; i++) {
 
       data.push({
         id: data.length + 1,
-        // id: crypto.randomUUID(),
         name: random_names[categ][
           Math.floor(Math.random() * random_names[categ].length)
         ],
