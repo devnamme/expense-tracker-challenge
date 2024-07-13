@@ -6,34 +6,57 @@ import data from "../data";
 export interface ExpensesState {
   byID: { [key: number]: Expense };
   byDay: {
-    total: number;
-    expenses: {
-      [key: string]: number[];
-      // "YYYY-MM-DD": string[]
+    // "YYYY-MM-DD": string[]
+    [key: string]: {
+      total: number;
+      expenses: number[];
     };
   };
   byWeek: {
-    total: number;
-    expenses: {
-      [key: string]: number[];
-      // "YYYY-MM-DD": string[]
-      // DD should be day 0 (Sunday)
+    // "YYYY-MM-DD": string[]
+    [key: string]: {
+      total: number;
+      expenses: number[];
     };
   };
   byMonth: {
-    total: number;
-    expenses: {
-      [key: string]: number[];
-      // "YYYY-MM": string[]
+    // "YYYY-MM": string[]
+    [key: string]: {
+      total: number;
+      expenses: number[];
     };
   };
 }
 
+export type ExpensesGroupKey = "byDay" | "byWeek" | "byMonth";
+
 const INITIAL_STATE: ExpensesState = {
   byID: {},
-  byDay: { total: 0, expenses: {} },
-  byWeek: { total: 0, expenses: {} },
-  byMonth: { total: 0, expenses: {} },
+  byDay: {},
+  byWeek: {},
+  byMonth: {},
+};
+
+const addToGroup = (
+  state: any,
+  group: ExpensesGroupKey,
+  key: string,
+  id: number
+) => {
+  if (state[group][key] === undefined)
+    state[group][key] = { total: 0, expenses: [] };
+  state[group][key].expenses.push(id);
+};
+
+const calculateTotal = (
+  state: any,
+  group: "byDay" | "byWeek" | "byMonth",
+  key: string
+) => {
+  state[group][key].total = 0;
+  state[group][key].expenses.forEach(
+    (id: number) => (state[group][key].total += state.byID[id].amount)
+  );
 };
 
 const expensesSlice = createSlice({
@@ -42,9 +65,9 @@ const expensesSlice = createSlice({
   reducers: {
     fetchTasks: (state) => {
       state.byID = {};
-      state.byDay = { total: 0, expenses: {} };
-      state.byWeek = { total: 0, expenses: {} };
-      state.byMonth = { total: 0, expenses: {} };
+      state.byDay = {};
+      state.byWeek = {};
+      state.byMonth = {};
 
       data.forEach((row: Expense) => {
         state.byID[row.id!] = row;
@@ -52,19 +75,16 @@ const expensesSlice = createSlice({
         const date = new Date(row.date);
 
         const day = getDayKey(date);
-        if (state.byDay.expenses[day] === undefined)
-          state.byDay.expenses[day] = [];
-        state.byDay.expenses[day].push(row.id!);
+        addToGroup(state, "byDay", day, row.id!);
+        state.byDay[day].total += row.amount;
 
         const week = getWeekKey(date);
-        if (state.byWeek.expenses[week] === undefined)
-          state.byWeek.expenses[week] = [];
-        state.byWeek.expenses[week].push(row.id!);
+        addToGroup(state, "byWeek", week, row.id!);
+        state.byWeek[week].total += row.amount;
 
         const month = getMonthKey(date);
-        if (state.byMonth.expenses[month] === undefined)
-          state.byMonth.expenses[month] = [];
-        state.byMonth.expenses[month].push(row.id!);
+        addToGroup(state, "byMonth", month, row.id!);
+        state.byMonth[month].total += row.amount;
       });
     },
 
@@ -92,19 +112,23 @@ const expensesSlice = createSlice({
       const date = new Date(action.payload.date);
 
       const day = getDayKey(date);
-      if (state.byDay.expenses[day] === undefined)
-        state.byDay.expenses[day] = [];
-      state.byDay.expenses[day].push(id);
+      addToGroup(state, "byDay", day, id);
 
       const week = getWeekKey(date);
-      if (state.byWeek.expenses[week] === undefined)
-        state.byWeek.expenses[week] = [];
-      state.byWeek.expenses[week].push(id);
+      addToGroup(state, "byWeek", week, id);
 
       const month = getMonthKey(date);
-      if (state.byMonth.expenses[month] === undefined)
-        state.byMonth.expenses[month] = [];
-      state.byMonth.expenses[month].push(id);
+      addToGroup(state, "byMonth", month, id);
+
+      // (["byDay", "byWeek", "byMonth"] as ExpensesGroupKey[]).forEach(
+      //   (group: ExpensesGroupKey) =>
+      //     Object.keys(state[group]).forEach((key: string) =>
+      //       calculateTotal(state, group, key)
+      //     )
+      // );
+      calculateTotal(state, "byDay", day);
+      calculateTotal(state, "byWeek", week);
+      calculateTotal(state, "byMonth", month);
     },
 
     editTask: (
@@ -117,7 +141,8 @@ const expensesSlice = createSlice({
         };
       }
     ) => {
-      // TODO
+      // TODO edit
+      // TODO recalculate totals
     },
 
     deleteTask: (
@@ -129,7 +154,8 @@ const expensesSlice = createSlice({
         };
       }
     ) => {
-      // TODO
+      // TODO delete
+      // TODO recalculate totals
     },
   },
 });
