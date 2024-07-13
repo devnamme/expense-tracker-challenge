@@ -31,6 +31,7 @@ export default function ExpenseModal({ active }: Props) {
   const expenseModalState = useSelector(
     (state: RootState) => state.expenseModalState
   );
+  const pagination = useSelector((state: RootState) => state.pagination);
 
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
@@ -124,7 +125,7 @@ export default function ExpenseModal({ active }: Props) {
       } else {
         setName("");
         setAmount("");
-        setDate("");
+        setDate(getDayKey(new Date(pagination.date)));
         setCategory("");
       }
 
@@ -229,9 +230,7 @@ export default function ExpenseModal({ active }: Props) {
         <input
           type="submit"
           className="bg-primary-dark text-white rounded p-2 cursor-pointer"
-          value={
-            expenseModalState.expense != null ? "Save Expense" : "Add Expense"
-          }
+          value={expenseModalState.expense != null ? "Save" : "Add Expense"}
         />
 
         <input
