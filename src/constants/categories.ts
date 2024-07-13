@@ -1,7 +1,12 @@
-export const Categories = [
-  { name: "Food", value: "food" },
-  { name: "Bills", value: "bills" },
-  { name: "Transportation", value: "transportation" },
-  { name: "Clothing", value: "clothing" },
-  { name: "Others", value: "others" },
-];
+export const Categories: {
+  [key: string]: {
+    name: string;
+    color: string;
+  };
+} = {
+  food: { name: "Food", color: "red" },
+  bills: { name: "Bills", color: "blue" },
+  transportation: { name: "Transportation", color: "orange" },
+  clothing: { name: "Clothing", color: "violet" },
+  others: { name: "Others", color: "yellow" },
+};

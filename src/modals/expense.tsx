@@ -213,9 +213,9 @@ export default function ExpenseModal({ active }: Props) {
           }`}
         >
           <option value="">--Select Category--</option>
-          {Categories.map((categ) => (
-            <option key={`select-category-${categ.value}`} value={categ.value}>
-              {categ.name}
+          {Object.keys(Categories).map((key: string) => (
+            <option key={`select-category-${key}`} value={key}>
+              {Categories[key].name}
             </option>
           ))}
         </select>
