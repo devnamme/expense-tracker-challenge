@@ -13,7 +13,7 @@ export default function ListPage() {
     )}` as ExpensesGroupKey;
 
   return (
-    <div className="min-h-0 grow flex flex-col flex-nowrap gap-y-4 overflow-y-auto -mb-6 pb-6">
+    <div className="min-h-0 grow flex flex-col flex-nowrap gap-y-2 overflow-y-auto -mb-6 pb-6">
       {expenses[getGroup()][pagination.date] !== undefined ? (
         expenses[getGroup()][pagination.date].expenses.map(
           (expenseID: number) => (

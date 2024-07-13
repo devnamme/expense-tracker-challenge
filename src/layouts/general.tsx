@@ -1,11 +1,10 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import NavMenu from "../components/nav-menu";
 import Total from "../components/total";
 import ViewModeSelector from "../components/view-mode-selector";
 import ExpenseModal from "../modals/expense";
-import { ExpensesGroupKey, fetchExpenses } from "../redux/modules/expenses";
+import { ExpensesGroupKey } from "../redux/modules/expenses";
 import { setDate, setMode } from "../redux/modules/pagination";
 import { AppDispatch, RootState } from "../redux/store";
 import { ViewMode } from "../types/view-mode.interface";
@@ -26,10 +25,6 @@ export default function GeneralLayout({}: GeneralLayoutProps) {
     `by${pagination.mode[0].toUpperCase()}${pagination.mode.substring(
       1
     )}` as ExpensesGroupKey;
-
-  useEffect(() => {
-    if (!expenseModalState.active) dispatch(fetchExpenses());
-  }, [expenseModalState.active]);
 
   return (
     <div className="w-screen h-screen flex flex-col flex-nowrap items-stretch justify-center">
