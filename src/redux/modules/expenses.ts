@@ -182,8 +182,27 @@ const expensesSlice = createSlice({
         };
       }
     ) => {
-      // TODO delete
-      // TODO recalculate totals
+      const oldDate = new Date(state.byID[action.payload.id].date);
+      const oldKeys = [
+        getDayKey(oldDate),
+        getWeekKey(oldDate),
+        getMonthKey(oldDate),
+      ];
+
+      (["byDay", "byWeek", "byMonth"] as ExpensesGroupKey[]).map(
+        (group: ExpensesGroupKey, idx: number) => {
+          // delete
+          state[group][oldKeys[idx]].expenses = state[group][
+            oldKeys[idx]
+          ].expenses.filter((id: number) => id !== action.payload.id);
+
+          // recalculate
+          calculateTotal(state, group, oldKeys[idx]);
+        }
+      );
+
+      // remove from IDs
+      delete state.byID[action.payload.id];
     },
   },
 });

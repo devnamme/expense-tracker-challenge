@@ -8,7 +8,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../constants/categories";
 import { closeModal } from "../redux/modules/expense-modal";
-import { addExpense, editExpense } from "../redux/modules/expenses";
+import {
+  addExpense,
+  deleteExpense,
+  editExpense,
+} from "../redux/modules/expenses";
 import { AppDispatch, RootState } from "../redux/store";
 import { getDayKey } from "../utils/dates";
 
@@ -111,7 +115,8 @@ export default function ExpenseModal({ active }: Props) {
     dispatch(closeModal());
   };
 
-  const onDeleteClick: MouseEventHandler = (event) => {
+  const onDeleteClick: MouseEventHandler = () => {
+    dispatch(deleteExpense({ id: expenseModalState.expense!.id! }));
     dispatch(closeModal());
   };
 
