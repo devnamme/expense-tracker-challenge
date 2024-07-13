@@ -14,7 +14,6 @@ export default function HomePage() {
 
   const [mode, setMode] = useState<ViewMode>("day");
   const [date, setDate] = useState<string>(
-    // "2024-07-14"
     `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
       .toString()
       .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`
