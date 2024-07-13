@@ -11,7 +11,7 @@ export default function ExpenseListItem({ expense, showDate = false }: Props) {
       <p className="">{expense.name}</p>
       <div className="flex flex-col items-end">
         <p className="">PHP {expense.amount.toFixed(2)}</p>
-        <p className="">{expense.date}</p>
+        <p className={showDate ? "" : "hidden"}>{expense.date}</p>
       </div>
     </div>
   );
