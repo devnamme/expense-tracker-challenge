@@ -145,7 +145,7 @@ const expensesSlice = createSlice({
       // TODO recalculate totals
     },
 
-    deleteTask: (
+    deleteExpense: (
       state,
       action: {
         type: string;
@@ -160,6 +160,6 @@ const expensesSlice = createSlice({
   },
 });
 
-export const { fetchExpenses, addExpense, editExpense, deleteTask } =
+export const { fetchExpenses, addExpense, editExpense, deleteExpense } =
   expensesSlice.actions;
 export const expensesReducer = expensesSlice.reducer;
