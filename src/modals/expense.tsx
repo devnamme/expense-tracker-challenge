@@ -25,7 +25,7 @@ export default function ExpenseModal({ active }: Props) {
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("others");
 
-  const fieldClasses = "p-2 rounded appearance-none";
+  const fieldClasses = "bg-white text-black p-2 rounded appearance-none";
 
   const onSubmit: FormEventHandler = (event) => {
     event.preventDefault();
@@ -48,7 +48,7 @@ export default function ExpenseModal({ active }: Props) {
 
   return (
     <form
-      className="w-full bg-gray-300 rounded-2xl p-4 flex flex-col flex-nowrap gap-y-4"
+      className="w-full bg-gray-300 rounded-2xl p-4 grid grid-cols-1 grid-rows-5 gap-y-4"
       onSubmit={onSubmit}
     >
       <input
