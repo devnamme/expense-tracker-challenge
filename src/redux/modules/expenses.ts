@@ -150,7 +150,7 @@ const expensesSlice = createSlice({
       action: {
         type: string;
         payload: {
-          id: string;
+          id: number;
         };
       }
     ) => {

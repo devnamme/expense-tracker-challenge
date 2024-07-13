@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../constants/categories";
 import { closeModal } from "../redux/modules/expense-modal";
-import { addExpense } from "../redux/modules/expenses";
+import { addExpense, editExpense } from "../redux/modules/expenses";
 import { AppDispatch, RootState } from "../redux/store";
 import { getDayKey } from "../utils/dates";
 
@@ -85,7 +85,17 @@ export default function ExpenseModal({ active }: Props) {
     if (!valid) return;
 
     if (expenseModalState.expense !== null) {
-      // dispatch();
+      dispatch(
+        editExpense({
+          id: expenseModalState.expense.id!,
+          expense: {
+            name: name,
+            amount: parseFloat(amount),
+            date: new Date(date).toISOString(),
+            category: category,
+          },
+        })
+      );
     } else {
       dispatch(
         addExpense({
