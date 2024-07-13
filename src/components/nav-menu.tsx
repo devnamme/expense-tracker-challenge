@@ -1,13 +1,17 @@
 import { AddSquare, Driver, Home } from "iconsax-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setAdding } from "../redux/modules/expense-modal";
-import { AppDispatch } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 
 export default function NavMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { pathname } = useLocation();
+
+  const expenseModalState = useSelector(
+    (state: RootState) => state.expenseModalState
+  );
 
   const onHomeClick = () => navigate("/");
   const onAddClick = () => {
@@ -30,6 +34,7 @@ export default function NavMenu() {
         color="white"
         className="cursor-pointer"
         onClick={onAddClick}
+        variant={expenseModalState.active ? "Bold" : "Outline"}
       />
 
       <Driver
