@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Expense } from "../../types/expense";
+import { Expense } from "../../types/expense.interface";
 
 export interface ExpenseModalState {
   active: boolean;
