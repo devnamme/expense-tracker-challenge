@@ -98,7 +98,9 @@ export default function ExpenseModal({ active }: Props) {
         <input
           type="submit"
           className="bg-primary-dark text-white rounded p-2 cursor-pointer"
-          value="Add Expense"
+          value={
+            expenseModalState.expense != null ? "Save Expense" : "Add Expense"
+          }
         />
 
         <input
