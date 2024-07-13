@@ -25,7 +25,8 @@ export default function ExpenseModal({ active }: Props) {
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("others");
 
-  const fieldClasses = "bg-white text-black p-2 rounded appearance-none";
+  const fieldClasses =
+    "bg-white text-black text-left p-2 rounded appearance-none";
 
   const onSubmit: FormEventHandler = (event) => {
     event.preventDefault();
